@@ -2,20 +2,26 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
-    <nav className="bg-slate-200">
+    <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
-        <Link className="font-bold" to="/">
+        <Link className="font-bold text-white" to="/">
           MERN Auth
         </Link>
         <ul className="flex gap-4">
           <li>
-            <Link to="/">Home</Link>
+            <Link className="text-white" to="/">
+              Home
+            </Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link className="text-white" to="/about">
+              About
+            </Link>
           </li>
           <li>
-            <Link to="/sign-in">Sign In</Link>
+            <Link className="text-white" to="/sign-in">
+              Sign In
+            </Link>
           </li>
         </ul>
       </div>
