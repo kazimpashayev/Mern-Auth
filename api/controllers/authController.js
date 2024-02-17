@@ -17,6 +17,15 @@ export const signup = async (req, res, next) => {
       },
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({
+        status: 'fail',
+        statusCode: 400,
+        message: 'Username or email already exists',
+        error: error.message,
+      });
+    }
+
     next(error);
   }
 };

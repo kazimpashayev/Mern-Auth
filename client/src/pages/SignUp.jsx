@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -25,15 +26,24 @@ export default function SignUp() {
       const data = await response.json();
       setLoading(false);
 
-      if (data.status === 'fail') {
-        setError(true);
+      if (data.statusCode === 400) {
+        setError(data.message);
         return;
       }
     } catch (error) {
+      console.log(error);
       setLoading(false);
-      setError(true);
+      setError('Something went wrong!');
     }
   };
+
+  if (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: error,
+    });
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -60,6 +70,7 @@ export default function SignUp() {
           id="password"
           onChange={handleChange}
         />
+
         <button
           disabled={loading}
           type="submit"
@@ -74,7 +85,6 @@ export default function SignUp() {
           <Link to="/sign-in">Sign in</Link>
         </span>
       </div>
-      <p className="text-red-700 mt-5">{error && 'Something went wrong!'}</p>
     </div>
   );
 }
