@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '../store/slices/userSlice';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -16,8 +22,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      setError(false);
+      dispatch(signInStart());
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -26,17 +31,16 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      setLoading(false);
+      dispatch(signInSuccess(data));
 
       if (data.statusCode === 401) {
-        setError(data.error);
+        dispatch(signInFailure(data.error));
         return;
       }
 
       navigate('/');
     } catch (error) {
-      setLoading(false);
-      setError('Something went wrong!');
+      dispatch(signInFailure(error));
     }
   };
 
