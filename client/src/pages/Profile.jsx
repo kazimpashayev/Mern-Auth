@@ -1,5 +1,44 @@
-import React from 'react';
+import { useSelector } from 'react-redux';
 
 export default function Profile() {
-  return <div>Profile</div>;
+  const { currentUser } = useSelector((state) => state.user);
+  return (
+    <div className="p-3 max-w-lg mx-auto">
+      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
+      <form className="flex flex-col gap-4">
+        <img
+          className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
+          src={currentUser.profilePhoto}
+          alt="The Profile Photo"
+        />
+        <input
+          defaultValue={currentUser.username}
+          className="bg-gray-200 rounded-lg p-3"
+          type="text"
+          id="username"
+          placeholder="Username"
+        />
+        <input
+          defaultValue={currentUser.email}
+          className="bg-gray-200 rounded-lg p-3"
+          type="email"
+          id="email"
+          placeholder="Email"
+        />
+        <input
+          className="bg-gray-200 rounded-lg p-3"
+          type="password"
+          id="password"
+          placeholder="Password"
+        />
+        <button className="bg-gray-800 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-80">
+          Update
+        </button>
+      </form>
+      <div className="flex justify-between mt-5">
+        <span className="text-red-700 cursor-pointer">Delete Account</span>
+        <span className="text-red-700 cursor-pointer">Sign Out</span>
+      </div>
+    </div>
+  );
 }
