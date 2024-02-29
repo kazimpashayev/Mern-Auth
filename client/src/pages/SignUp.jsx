@@ -11,7 +11,7 @@ import {
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,27 +32,30 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
+
       const data = await response.json();
-      dispatch(signInSuccess(data));
 
       if (data.statusCode === 400) {
         dispatch(signInFailure(data.message));
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.message,
+        });
         return;
       }
 
+      dispatch(signInSuccess(data));
       navigate('/sign-in');
     } catch (error) {
       dispatch(signInFailure(error));
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      });
     }
   };
-
-  if (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: error,
-    });
-  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
