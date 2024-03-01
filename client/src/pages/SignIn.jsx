@@ -34,7 +34,7 @@ export default function SignIn() {
 
       const data = await response.json();
 
-      if (data.statusCode === 401) {
+      if (data.status === 'fail') {
         dispatch(signInFailure(data.error));
         Swal.fire({
           icon: 'error',
@@ -55,14 +55,6 @@ export default function SignIn() {
       });
     }
   };
-
-  // if (error) {
-  //   Swal.fire({
-  //     icon: 'error',
-  //     title: 'Oops...',
-  //     text: error,
-  //   });
-  // }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
